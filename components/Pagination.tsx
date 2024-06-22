@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-import classNames from "@/utils/classNames";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 function PaginationItem({
@@ -16,10 +15,7 @@ function PaginationItem({
   return (
     <li
       onClick={() => updatePage(page)}
-      className={classNames(
-        "cursor-pointer rounded-full px-3 py-1",
-        currentPage === page ? "bg-secondary-500 text-white" : "",
-      )}
+      className={"pagination-item" + (currentPage === page ? " active" : "")}
     >
       {page}
     </li>
@@ -58,14 +54,14 @@ export default function Pagination({
   );
 
   return (
-    <ul className="mx-auto flex w-fit items-center text-black">
+    <ul className="pagination">
       <li>
         <button
           disabled={currentPage === 1}
           onClick={() => currentPage !== 1 && updatePage(currentPage - 1)}
-          className="mr-2 rounded-full border border-secondary-500 p-1.5 text-secondary-500 transition-colors duration-300 enabled:hover:bg-secondary-50 disabled:opacity-50"
+          className="btn prev"
         >
-          <ChevronLeftIcon className="w-4" />
+          <ChevronLeftIcon />
         </button>
       </li>
       {lastPage > 3 && currentPage > 2 && (
@@ -76,7 +72,7 @@ export default function Pagination({
             updatePage={updatePage}
           />
           {lastPage !== 4 && currentPage - 2 > 1 && (
-            <span className="px-2">...</span>
+            <span className="divider">...</span>
           )}
         </>
       )}
@@ -91,7 +87,7 @@ export default function Pagination({
       {lastPage > 3 && currentPage < lastPage - 1 && (
         <>
           {lastPage !== 4 && currentPage < lastPage - 2 && (
-            <span className="px-2">...</span>
+            <span className="divider">...</span>
           )}
           <PaginationItem
             page={lastPage}
@@ -104,9 +100,9 @@ export default function Pagination({
         <button
           disabled={currentPage >= lastPage}
           onClick={() => currentPage < lastPage && updatePage(currentPage + 1)}
-          className="ml-2 rounded-full border border-secondary-500 p-1.5 text-secondary-500 transition-colors duration-300 enabled:hover:bg-secondary-50 disabled:opacity-50"
+          className="btn next"
         >
-          <ChevronRightIcon className="w-4" />
+          <ChevronRightIcon />
         </button>
       </li>
     </ul>

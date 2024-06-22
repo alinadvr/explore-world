@@ -1,0 +1,74 @@
+@import "global";
+
+main {
+  box-sizing: border-box;
+  max-width: 1200px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 20px 0;
+
+  & > * {
+    padding: 0 20px;
+    margin-bottom: 20px;
+  }
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+nav {
+  color: $primary-500;
+  font-size: $text-lg;
+
+  & > *:after {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-width: 0 1.5px 1.5px 0;
+    border-color: $gray-400;
+    border-style: solid;
+    transform: rotate(-45deg);
+    margin: 0 12px 2px 8px;
+  }
+
+  & > *:last-child:after {
+    display: none;
+  }
+}
+
+.city-title {
+  font-size: $text-5xl;
+  font-weight: 900;
+  background-image: linear-gradient(45deg, #fff864, #f8205d);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.city-image {
+  position: relative;
+  width: 100%;
+  height: 40vh;
+  padding: 0;
+  background-color: $gray-200;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+p {
+  margin-bottom: 8px;
+
+  span {
+    font-weight: 600;
+  }
+}
+
+.map {
+  height: 450px;
+  padding: 0;
+}

@@ -11,7 +11,6 @@ export default async function fetchCities(
             .join("&")}`
         : ""
     }`,
-    { next: { revalidate: 0 } },
   );
 
   return await res.json();

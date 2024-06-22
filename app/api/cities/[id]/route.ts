@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 
-import { APIResponse, City } from "@/types";
+import { APIResponse, CityDetails } from "@/types";
 
 export async function GET(
   req: Request,
-): Promise<NextResponse<APIResponse<City>>> {
-  console.log("get city");
+): Promise<NextResponse<APIResponse<CityDetails>>> {
   const cityId = new URL(decodeURI(req.url)).pathname.split("/")[3];
 
   try {
-    const cityRes = await fetch(`${process.env.GEODB_API}/cities${cityId}`);
+    const cityRes = await fetch(`${process.env.GEODB_API}/cities/${cityId}`);
 
     if (!cityRes.ok)
       return NextResponse.json({
@@ -18,19 +17,16 @@ export async function GET(
         message: cityRes.statusText,
       });
 
-    const city = (await cityRes.json()) as City;
-
-    console.log("city", city);
+    const { data: city } = (await cityRes.json()) as { data: CityDetails };
 
     try {
       const imagesRes = await fetch(
-        `https://api.unsplash.com/search/photos?client_id=_GD90UlwSnAcZxRRBY-m66ngE2A2d5fYUtYUDxxZQFE&query=${city.name}`,
+        `https://api.unsplash.com/search/photos?client_id=${process.env.UNSPLASH_ACCESS_KEY}&query=${city.name}`,
       );
 
       const data = (await imagesRes.json()) as {
         results: { urls: { raw } }[];
       };
-      console.log("image", data.results[0]);
       if (data.results[0].urls.raw) city.image = data.results[0].urls.raw;
     } catch (error) {
       console.error("ERROR WHILE GETTING CITIES IMAGES:\n", error);

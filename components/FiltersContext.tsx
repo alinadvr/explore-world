@@ -1,16 +1,19 @@
 "use client";
 
-import { createContext, ReactNode, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
-import { SortParams } from "@/utils/getURLParams";
+import { isFilter, SortParams } from "@/types";
 
-const Context = createContext<{
+export const FiltersContext = createContext<{
   filters: SortParams;
-  updateFilters: (filter: string, value?: string) => void;
+  updateFilters: (filter: keyof SortParams, value?: string) => void;
+  clearFilters: () => void;
 }>({
   filters: {},
   updateFilters: (filter, value) =>
-    console.log(`filter ${filter}, value ${value}`),
+    console.info(`filter ${filter}, value ${value}`),
+  clearFilters: () => console.info("filters cleared"),
 });
 
 export default function FiltersContextProvider({
@@ -19,10 +22,28 @@ export default function FiltersContextProvider({
   children: ReactNode;
 }) {
   const [filters, setFilters] = useState<SortParams>({});
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    [...params.entries()].forEach(
+      ([filter, value]) =>
+        isFilter(filter) && updateFilters(filter, value.toString()),
+    );
+  }, []);
 
   const updateFilters = (filter: keyof SortParams, value?: string | number) => {
     setFilters((prevState) => {
-      if (value !== undefined) return { ...prevState, [filter]: value };
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete(filter);
+      window.history.replaceState(null, "", `?${params.toString()}`);
+
+      if (value !== undefined) {
+        params.set(filter, value.toString());
+        console.log("params to string", params.toString());
+        window.history.replaceState(null, "", `?${params.toString()}`);
+        return { ...prevState, [filter]: value };
+      }
 
       const prevStateCopy = { ...prevState };
       delete prevStateCopy[filter];
@@ -30,9 +51,11 @@ export default function FiltersContextProvider({
     });
   };
 
+  const clearFilters = () => setFilters({});
+
   return (
-    <Context.Provider value={{ filters, updateFilters }}>
+    <FiltersContext.Provider value={{ filters, updateFilters, clearFilters }}>
       {children}
-    </Context.Provider>
+    </FiltersContext.Provider>
   );
 }

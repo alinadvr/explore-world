@@ -1,0 +1,251 @@
+$text-xs: 0.75rem;
+$text-sm: 0.875rem;
+$text-base: 1rem;
+$text-lg: 1.125rem;
+$text-xl: 1.25rem;
+$text-2xl: 1.5rem;
+$text-3xl: 1.875rem;
+$text-4xl: 2.25rem;
+$text-5xl: 3rem;
+$text-6xl: 3.75rem;
+$text-7xl: 4.5rem;
+$text-8xl: 6rem;
+$text-9xl: 8rem;
+
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-800: #1f2937;
+$gray-900: #111827;
+$gray-950: #030712;
+
+$primary-50: #f0f9ff;
+$primary-100: #e0f2fe;
+$primary-200: #bae6fd;
+$primary-300: #7dd3fc;
+$primary-400: #38bdf8;
+$primary-500: #0ea5e9;
+$primary-600: #0284c7;
+$primary-700: #0369a1;
+$primary-800: #075985;
+$primary-900: #0c4a6e;
+$primary-950: #082f49;
+
+body {
+  margin: 0 auto;
+}
+
+input:focus {
+  outline: none;
+}
+
+input {
+  border: none;
+  font-size: $text-base;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+  height: fit-content;
+}
+
+@mixin user-select($property) {
+  -webkit-user-select: $property; /* Safari */
+  -ms-user-select: $property; /* IE 10 and IE 11 */
+  user-select: $property; /* Standard syntax */
+}
+
+@mixin box-shadow($x-length, $y-length, $blur, $spread, $color) {
+  -webkit-box-shadow: $x-length $y-length $blur $spread $color; /* Safari */
+  -moz-box-shadow: $x-length $y-length $blur $spread $color; /* IE 10 and IE 11 */
+  box-shadow: $x-length $y-length $blur $spread $color; /* Standard syntax */
+}
+
+.description {
+  font-size: $text-sm;
+  color: $gray-400;
+}
+
+.input {
+  background-color: white;
+  border-radius: 999px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 10px;
+  color: $primary-700;
+
+  &::placeholder {
+    font-size: $text-sm;
+    color: $primary-300;
+  }
+}
+
+.custom-select {
+  position: relative;
+  min-width: 260px;
+  color: $primary-700;
+  @include user-select(none);
+
+  .input {
+    svg {
+      height: 15px;
+      color: $gray-400;
+      transition: transform 0.2s;
+    }
+
+    svg.open {
+      transform: rotate(180deg);
+    }
+  }
+
+  .dropdown {
+    $border-radius: 12px;
+
+    opacity: 0;
+    pointer-events: none;
+    top: 100%;
+    transition: all 0.2s;
+
+    z-index: 5;
+    position: absolute;
+    left: 0;
+    background-color: white;
+    border-radius: $border-radius;
+    min-width: 260px;
+    @include box-shadow(0, 10px, 15px, -3px, rgb(0 0 0 / 0.1));
+
+    li {
+      padding: 14px 20px;
+      border-bottom: 1px solid $gray-100;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $primary-100;
+      }
+
+      &:first-child {
+        border-radius: $border-radius $border-radius 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 $border-radius $border-radius;
+        border-bottom: none;
+      }
+    }
+
+    &.open {
+      opacity: 100;
+      pointer-events: auto;
+      top: 115%;
+    }
+  }
+}
+
+.pagination {
+  margin: 0 auto;
+  color: black;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+
+  .btn {
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid $primary-500;
+    border-radius: 100px;
+    padding: 6px;
+    color: $primary-500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:enabled:hover {
+      background-color: $primary-100;
+    }
+
+    &:disabled {
+      opacity: 40%;
+    }
+
+    &.prev {
+      margin-right: 8px;
+    }
+
+    &.next {
+      margin-left: 8px;
+    }
+
+    svg {
+      width: 16px;
+    }
+  }
+
+  .pagination-item {
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 5px 12px;
+
+    &.active {
+      background-color: $primary-500;
+      color: white;
+    }
+  }
+
+  .divider {
+    padding: 0 8px;
+  }
+}
+
+.error-message {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.loading-background {
+  position: relative;
+  overflow: hidden;
+  background-color: $gray-100;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, white, transparent);
+    animation: shimmer 3s infinite;
+    content: '';
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
